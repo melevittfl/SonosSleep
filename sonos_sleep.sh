@@ -1,6 +1,6 @@
 #!/bin/bash
-cd /home/myth/Projects/SonosSleep
+cd /home/myth/SonosSleep
 source ./venv/bin/activate
 
-python sonos_sleep.py
+python3 sonos_sleep.py
 
