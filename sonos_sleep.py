@@ -14,7 +14,7 @@ def seconds_to_minutes_and_seconds(seconds):
 
 
 def player_status(device):
-    return device.get_current_transport_info()['current_transport_state']
+    return device.get_current_transport_info()["current_transport_state"]
 
 
 def main():
@@ -41,7 +41,9 @@ def main():
                 )
                 device.set_sleep_timer(sleep_time)
             else:
-                logging.info(f"Sleep timer was set by a human or {SONOS_DEVICE_NAME} is not playing")
+                logging.info(
+                    f"Sleep timer was set by a human or {SONOS_DEVICE_NAME} is not playing"
+                )
         else:
             logging.info("Sleep timer already set")
         sleep_time = device.get_sleep_timer()
