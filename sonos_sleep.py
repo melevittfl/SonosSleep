@@ -18,10 +18,6 @@ def player_status(device):
     return device.get_current_transport_info()['current_transport_state']
 
 
-def player_status(device):
-    return device.get_current_transport_info()['current_transport_state']
-
-
 def main():
     device = by_name(SONOS_DEVICE_NAME)
     status = player_status(device)
