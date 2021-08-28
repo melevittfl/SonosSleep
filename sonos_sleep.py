@@ -1,4 +1,3 @@
-import soco
 from soco.discovery import by_name
 from time import sleep
 import datetime
