@@ -1,4 +1,3 @@
-import soco
 from soco.discovery import by_name
 from time import sleep
 import datetime
@@ -14,9 +13,13 @@ def seconds_to_minutes_and_seconds(seconds):
     return datetime.datetime.fromtimestamp(seconds).strftime("%M minutes %S seconds")
 
 
+def player_status(device):
+    return device.get_current_transport_info()["current_transport_state"]
+
+
 def main():
     device = by_name(SONOS_DEVICE_NAME)
-    status = device.get_current_transport_info()["current_transport_state"]
+    status = player_status(device)
     logging.debug(f"Sonos {SONOS_DEVICE_NAME} device is {status}")
     if status == "PLAYING":
         logging.info(f"{SONOS_DEVICE_NAME} is Playing")
@@ -32,14 +35,15 @@ def main():
                 f"Sleep timer not set. Pausing for {seconds_to_minutes_and_seconds(pause_time)}"
             )
             sleep(pause_time)
-            if not device.get_sleep_timer():
+            if not device.get_sleep_timer() and player_status(device) == "PLAYING":
                 logging.info(
                     f"Sleep timer still not set after {seconds_to_minutes_and_seconds(pause_time)}. Setting sleep timer to {seconds_to_minutes_and_seconds(sleep_time)}"
                 )
                 device.set_sleep_timer(sleep_time)
             else:
-
-                logging.info(f"Sleep timer was set by a human")
+                logging.info(
+                    f"Sleep timer was set by a human or {SONOS_DEVICE_NAME} is not playing"
+                )
         else:
             logging.info("Sleep timer already set")
         sleep_time = device.get_sleep_timer()
@@ -55,7 +59,7 @@ if __name__ == "__main__":
         fcntl.lockf(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except IOError as e:
         if e.errno == errno.EAGAIN:
-            logging.error("Another instance already running")
+            logging.info("Another instance already running")
             sys.exit(-1)
 
     main()
