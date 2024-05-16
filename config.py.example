@@ -3,8 +3,8 @@
 LOG_SETTINGS = {
     'version': 1,
     'root': {
-        'level': 'INFO',
-        'handlers': ['file'],
+        'level': 'DEBUG',
+        'handlers': ['console'],
     },
     'handlers': {
         'file': {
@@ -16,6 +16,12 @@ LOG_SETTINGS = {
             'maxBytes': 10485760,
             'backupCount': 5,
         },
+        'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'normal',
+                'level': 'DEBUG',
+                'stream': 'ext://sys.stdout',
+        },
     },
     'formatters': {
         'normal': {
@@ -25,8 +31,22 @@ LOG_SETTINGS = {
     },
 }
 
-
+# The name of the Sonos device to check and set the sleep time if it is playing
 SONOS_DEVICE_NAME = "Master Bedroom"
+
+# Set the volume to this level if playing
 DEFAULT_VOLUME = 10
+
+# How long to set the sleep timer
 DEFAULT_SLEEP_TIME_MINUTES = 15
+
+# If the device is playing wait to see if someone sets it so we don't override it
 DEFAULT_WAIT_FOR_SLEEP_TIME_TO_BE_SET_IN_MINUTES = 0
+
+# Only sets the sleep timer if the device is playing when the time is betwwen
+# The START_TIME and the END_TIME. Specify the time in 24 hour:minute format.
+START_TIME = "23:00"
+END_TIME = "05:00"
+
+# How long to wait between each poll of the device to check if it is playing (in minutes)
+PAUSE_TIME_MINUTES = 5
