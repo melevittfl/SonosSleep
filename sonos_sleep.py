@@ -44,6 +44,8 @@ def set_sleep_timer():
             logging.info("Sleep timer already set")
         sleep_time = device.get_sleep_timer()
         logging.info(f"Sleep timer set to {seconds_to_minutes_and_seconds(sleep_time)}")
+        logging.debug(f"Pausing execution for {seconds_to_minutes_and_seconds(sleep_time + 10)}")
+        sleep(sleep_time + 10)
 
 def main():
     logging.debug("Starting loop...")
@@ -54,7 +56,7 @@ def main():
             set_sleep_timer()
         else:
             logging.debug(f"Time is not between {START_TIME} and {END_TIME}")
-        logging.debug(f"Sleeping for {seconds_to_minutes_and_seconds(PAUSE_TIME_MINUTES)}.")
+        logging.debug(f"Main loop sleeping for {minutes_to_seconds(PAUSE_TIME_MINUTES)}.")
         sleep(minutes_to_seconds(PAUSE_TIME_MINUTES))
 
 
