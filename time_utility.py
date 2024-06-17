@@ -18,7 +18,6 @@ def is_between_time(start, end, now=None):
     else:
         time_to_check = now
 
-    time_to_check = now
     start = make_time_from_string(start)
     end = make_time_from_string(end)
     logging.debug(f"Start: {start}, End: {end}, Now: {time_to_check}")
