@@ -15,7 +15,16 @@ def player_status(device):
 
 def set_sleep_timer():
     device = by_name(SONOS_DEVICE_NAME)
-    status = player_status(device)
+
+    # Don't crash if speaker has dropped off the network
+    if device is not None:
+        status = player_status(device)
+    else:
+        logging.debug(
+            f"Sonos {SONOS_DEVICE_NAME} device was not found"
+        )
+        status = "UNKNOWN"
+        
     logging.debug(f"Sonos {SONOS_DEVICE_NAME} device is {status}")
     if status == "PLAYING":
         logging.info(f"{SONOS_DEVICE_NAME} is Playing")
