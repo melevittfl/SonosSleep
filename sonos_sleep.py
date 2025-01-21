@@ -1,23 +1,19 @@
 from soco.discovery import by_name
 from time import sleep
-import datetime
 import fcntl
 import sys
 import errno
 import logging
 import logging.config
 from config import *
-
-
-def seconds_to_minutes_and_seconds(seconds):
-    return datetime.datetime.fromtimestamp(seconds).strftime("%M minutes %S seconds")
+from time_utility import *
 
 
 def player_status(device):
     return device.get_current_transport_info()["current_transport_state"]
 
 
-def main():
+def set_sleep_timer():
     device = by_name(SONOS_DEVICE_NAME)
     status = player_status(device)
     logging.debug(f"Sonos {SONOS_DEVICE_NAME} device is {status}")
@@ -48,6 +44,20 @@ def main():
             logging.info("Sleep timer already set")
         sleep_time = device.get_sleep_timer()
         logging.info(f"Sleep timer set to {seconds_to_minutes_and_seconds(sleep_time)}")
+        logging.debug(f"Pausing execution for {seconds_to_minutes_and_seconds(sleep_time + 10)}")
+        sleep(sleep_time + 10)
+
+def main():
+    logging.debug("Starting loop...")
+    while True:
+        logging.debug("Checking time...")
+        if is_between_time(START_TIME, END_TIME):
+            logging.debug(f"Time is between {START_TIME} and {END_TIME}")
+            set_sleep_timer()
+        else:
+            logging.debug(f"Time is not between {START_TIME} and {END_TIME}")
+        logging.debug(f"Main loop sleeping for {minutes_to_seconds(PAUSE_TIME_MINUTES)}.")
+        sleep(minutes_to_seconds(PAUSE_TIME_MINUTES))
 
 
 if __name__ == "__main__":
